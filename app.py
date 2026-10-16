@@ -87,8 +87,9 @@ def main():
         "Custom Input": "",
         "Positive Review": "An absolute masterpiece of cinema! The performances were brilliant, emotional, and captivating from start to finish.",
         "Negative Review": "This was an utter waste of time. The plot was completely incoherent and the acting was wooden and terrible.",
-        "Nuanced / Negation Review": "The movie was not good despite the high budget. I did not like the pacing and never felt connected to the characters.",
-        "Mixed Review": "The cinematography and music were wonderful, but the dialogue and screenplay were painfully bad.",
+        "Negation Review (Multi-sentence)": "The film was not good and I really didn't like the acting. Despite having a massive budget, it completely failed to entertain.",
+        "Mixed / Nuanced Review": "The cinematography and music were wonderful, but the dialogue and screenplay were painfully bad.",
+        "Short Borderline Review (Limitation Demo)": "I didn't like it.",
     }
 
     selected_sample = st.selectbox("Quick-load a sample review or enter your own below:", list(samples.keys()))
@@ -118,18 +119,40 @@ def main():
         # Inference
         probs = pipeline.predict_proba([cleaned_review])[0]
         prob_neg, prob_pos = probs[0], probs[1]
-        pred_label = "Positive" if prob_pos >= 0.5 else "Negative"
-        confidence = prob_pos if pred_label == "Positive" else prob_neg
+
+        # Classification decision with an explicit Uncertainty boundary (45% - 55%)
+        # Avoids presenting a coin-flip (e.g., 50.5%) as a definitive verdict
+        if 0.45 <= prob_pos <= 0.55:
+            pred_label = "Uncertain"
+            sentiment_status = "warning"
+            sentiment_title = "### Predicted Sentiment: **Uncertain / Borderline**"
+            confidence = max(prob_pos, prob_neg)
+        elif prob_pos > 0.55:
+            pred_label = "Positive"
+            sentiment_status = "success"
+            sentiment_title = "### Predicted Sentiment: **Positive**"
+            confidence = prob_pos
+        else:
+            pred_label = "Negative"
+            sentiment_status = "error"
+            sentiment_title = "### Predicted Sentiment: **Negative**"
+            confidence = prob_neg
 
         st.divider()
 
         # Display Prediction Cards
         col_res1, col_res2 = st.columns(2)
         with col_res1:
-            if pred_label == "Positive":
-                st.success("### Predicted Sentiment: **Positive**")
+            if sentiment_status == "success":
+                st.success(sentiment_title)
+            elif sentiment_status == "error":
+                st.error(sentiment_title)
             else:
-                st.error("### Predicted Sentiment: **Negative**")
+                st.warning(sentiment_title)
+                st.caption(
+                    "Borderline confidence (45%–55%). Common with very short inputs (e.g. <10 words) "
+                    "or mixed sentiment, where individual token coefficients offset one another."
+                )
 
         with col_res2:
             st.metric(

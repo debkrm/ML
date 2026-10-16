@@ -8,8 +8,12 @@ def clean_text(text: str) -> str:
     Steps:
     1. Replace HTML tags with a space (prevents glued words like 'end<br />then' -> 'end then').
     2. Lowercase text.
-    3. Keep only letters (a-z) and spaces.
-    4. Collapse consecutive whitespace characters into a single space and strip edges.
+    3. Strip apostrophes (ASCII ' and unicode ’) so contractions stay intact as single tokens
+       (e.g., "didn't" -> "didnt", "can't" -> "cant", "it's" -> "its", "won't" -> "wont").
+       This prevents scikit-learn's default tokenizer from dropping single-letter tokens ('t', 's')
+       and corrupting word semantics.
+    4. Keep only lowercase letters (a-z) and spaces.
+    5. Collapse consecutive whitespace characters into a single space and strip edges.
     """
     if not isinstance(text, str):
         return ""
@@ -20,24 +24,35 @@ def clean_text(text: str) -> str:
     # 2. Lowercase
     text = text.lower()
 
-    # 3. Retain only lowercase alphabet characters and spaces
+    # 3. Strip apostrophes BEFORE removing non-letters so contractions stay united
+    text = re.sub(r"['’]", "", text)
+
+    # 4. Retain only lowercase alphabet characters and spaces
     text = re.sub(r"[^a-z\s]", " ", text)
 
-    # 4. Collapse multiple spaces and strip leading/trailing whitespace
+    # 5. Collapse multiple spaces and strip leading/trailing whitespace
     text = re.sub(r"\s+", " ", text).strip()
 
     return text
 
 
 if __name__ == "__main__":
-    # Smoke tests for clean_text
-    test_1 = clean_text("end<br />then")
-    test_2 = clean_text("<br />I LOVED it!!!")
+    # Regression and unit tests
+    test_html = clean_text("end<br />then")
+    test_upper = clean_text("<br />I LOVED it!!!")
+    test_didnt = clean_text("I didn't like it")
+    test_contractions = clean_text("it's great and can't be missed, won't disappoint")
 
-    print(f"Test 1 result: '{test_1}'")
-    print(f"Test 2 result: '{test_2}'")
+    print(f"Test HTML: '{test_html}'")
+    print(f"Test Upper: '{test_upper}'")
+    print(f"Test Didn't: '{test_didnt}'")
+    print(f"Test Contractions: '{test_contractions}'")
 
-    assert test_1 == "end then", f"Test 1 failed: expected 'end then', got '{test_1}'"
-    assert test_2 == "i loved it", f"Test 2 failed: expected 'i loved it', got '{test_2}'"
+    assert test_html == "end then", f"Failed: expected 'end then', got '{test_html}'"
+    assert test_upper == "i loved it", f"Failed: expected 'i loved it', got '{test_upper}'"
+    assert test_didnt == "i didnt like it", f"Failed: expected 'i didnt like it', got '{test_didnt}'"
+    assert test_contractions == "its great and cant be missed wont disappoint", (
+        f"Failed: expected 'its great and cant be missed wont disappoint', got '{test_contractions}'"
+    )
 
-    print("All preprocessing tests passed!")
+    print("All preprocessing tests passed successfully!")

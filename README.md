@@ -10,10 +10,10 @@ An explainable, end-to-end Machine Learning pipeline for binary sentiment classi
 - **Principled Negation Handling:** Does **not** strip English stop words. This ensures sentiment-critical negations (`not`, `no`, `never`) are retained and captured in bigrams like `"not good"`.
 - **Explainability:** Real-time feature attribution via element-wise coefficient weighting ($w_i \cdot x_i$), showing which specific words push predictions toward Positive or Negative.
 - **Empirical Results (Test Split):**
-  - **Accuracy:** **89.34%** (vs. 50.00% Majority-Class Baseline)
-  - **Precision:** **88.96%**
-  - **Recall:** **89.83%**
-  - **F1-Score:** **89.40%**
+  - **Accuracy:** **89.38%** (vs. 50.00% Majority-Class Baseline)
+  - **Precision:** **88.97%**
+  - **Recall:** **89.91%**
+  - **F1-Score:** **89.44%**
 - **Error Analysis:** Real-world misclassified examples exported and analyzed for presentation.
 
 ---
@@ -86,10 +86,10 @@ Evaluated on the official held-out test split of 25,000 reviews:
 
 | Metric | TF-IDF + Logistic Regression | Majority-Class Baseline |
 | :--- | :---: | :---: |
-| **Accuracy** | **89.34%** | 50.00% |
-| **Precision** | **88.96%** | 50.00% |
-| **Recall** | **89.83%** | 100.00% |
-| **F1-Score** | **89.40%** | 66.67% |
+| **Accuracy** | **89.38%** | 50.00% |
+| **Precision** | **88.97%** | 50.00% |
+| **Recall** | **89.91%** | 100.00% |
+| **F1-Score** | **89.44%** | 66.67% |
 
 ### Confusion Matrix Heatmap
 
