@@ -97,8 +97,4 @@ Evaluated on the official held-out test split of 25,000 reviews:
 
 ---
 
-## Presentation & Viva Defense
 
-- 7-slide presentation breakdown calibrated for a 5-minute lab talk.
-- Deep error analysis on real misclassified test cases (sarcasm, mixed sentiment, fan bias).
-- Prepared viva defense covering TF-IDF weighting, bigram negation retention, and feature attribution ($w_i \cdot x_i$).
