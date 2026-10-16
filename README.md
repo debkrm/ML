@@ -91,14 +91,14 @@ Evaluated on the official held-out test split of 25,000 reviews:
 | **Recall** | **89.83%** | 100.00% |
 | **F1-Score** | **89.40%** | 66.67% |
 
-Confusion matrix heatmap is saved at `results/confusion_matrix.png`.
+### Confusion Matrix Heatmap
+
+![Confusion Matrix](results/confusion_matrix.png)
 
 ---
 
-## Presentation & Viva Prep
+## Presentation & Viva Defense
 
-Refer to [`slides/outline.md`](slides/outline.md) for:
-- 7-slide presentation breakdown (~5 minutes talk).
-- Word-for-word speaker notes.
-- Deep error analysis on 3 real misclassified cases.
-- Top viva questions and concise answers.
+- 7-slide presentation breakdown calibrated for a 5-minute lab talk.
+- Deep error analysis on real misclassified test cases (sarcasm, mixed sentiment, fan bias).
+- Prepared viva defense covering TF-IDF weighting, bigram negation retention, and feature attribution ($w_i \cdot x_i$).
