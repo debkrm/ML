@@ -76,7 +76,7 @@ This generates:
 ```bash
 streamlit run app.py
 ```
-Open [http://localhost:8501](http://localhost:8501) in your browser.
+Open [https://imdb-movies-sentiment-analysis.streamlit.app/](https://imdb-movies-sentiment-analysis.streamlit.app/) in your browser.
 
 ---
 
