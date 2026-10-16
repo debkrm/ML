@@ -95,10 +95,3 @@ Confusion matrix heatmap is saved at `results/confusion_matrix.png`.
 
 ---
 
-## Presentation & Viva Prep
-
-Refer to [`slides/outline.md`](slides/outline.md) for:
-- 7-slide presentation breakdown (~5 minutes talk).
-- Word-for-word speaker notes.
-- Deep error analysis on 3 real misclassified cases.
-- Top viva questions and concise answers.
